@@ -19,6 +19,9 @@
 	UIColor * _shadowColor;
 	UITouch * _currentTouch;
 	BOOL _currentTouchInsideBounds;
+	
+	UIImpactFeedbackGenerator * _feedbackGenerator;
+	BOOL _feedbackWasTriggered;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -26,6 +29,8 @@
 	if ((self = [super initWithFrame:frame])){
 		[self setMultipleTouchEnabled:NO];
 		[self setTintColor:[UIColor colorWithWhite:0.75 alpha:1.000]];
+		
+		_feedbackGenerator = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleMedium];
 	}
 	
 	return self;
@@ -42,6 +47,16 @@
 
 - (void)setDisplayedForce:(CGFloat)displayedForce {
 	_displayedForce = displayedForce;
+	
+	if (displayedForce > 0.9 && !_feedbackWasTriggered) {
+		[_feedbackGenerator prepare];
+		[_feedbackGenerator impactOccurred];
+		_feedbackWasTriggered = true;
+	}
+	else {
+		_feedbackWasTriggered = false;
+	}
+	
 	[self setNeedsDisplay];
 }
 
