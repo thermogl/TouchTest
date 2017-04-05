@@ -30,7 +30,7 @@
 		[self setMultipleTouchEnabled:NO];
 		[self setTintColor:[UIColor colorWithWhite:0.75 alpha:1.000]];
 		
-		_feedbackGenerator = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleMedium];
+		_feedbackGenerator = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleHeavy];
 	}
 	
 	return self;
@@ -48,10 +48,12 @@
 - (void)setDisplayedForce:(CGFloat)displayedForce {
 	_displayedForce = displayedForce;
 	
-	if (displayedForce > 0.9 && !_feedbackWasTriggered) {
-		[_feedbackGenerator prepare];
-		[_feedbackGenerator impactOccurred];
-		_feedbackWasTriggered = true;
+	if (displayedForce > 0.9) {
+		if (!_feedbackWasTriggered) {
+			[_feedbackGenerator prepare];
+			[_feedbackGenerator impactOccurred];
+			_feedbackWasTriggered = true;
+		}
 	}
 	else {
 		_feedbackWasTriggered = false;
